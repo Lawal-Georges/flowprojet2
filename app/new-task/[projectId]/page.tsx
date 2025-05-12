@@ -5,7 +5,7 @@ import AssignTask from 'app/components/AssignTask';
 import Wrapper from 'app/components/Wrapper'
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
-import ReactQuill from 'react-quill-new';
+import ReactQuill from 'react-quill';
 import { Project } from 'type';
 import 'react-quill-new/dist/quill.snow.css';
 import { toast } from 'react-toastify';

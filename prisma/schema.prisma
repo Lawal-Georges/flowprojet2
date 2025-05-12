@@ -3,10 +3,12 @@
 
 generator client {
   provider = "prisma-client-js"
+  output   = "./node_modules/@prisma/client" // Spécifie le chemin de sortie
 }
 
+
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

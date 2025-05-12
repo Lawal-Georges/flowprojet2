@@ -4,7 +4,7 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import 'react-quill-new/dist/quill.snow.css';
-import ReactQuill from 'react-quill-new';
+import ReactQuill from 'react-quill';
 import { useUser } from '@clerk/nextjs';
 import EmptyState from 'app/components/EmptyState';
 import UserInfo from 'app/components/UserInfo';
