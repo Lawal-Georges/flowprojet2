@@ -1,0 +1,9 @@
+{
+    "json.schemas": [],
+    "tailwindCSS.includeLanguages": {
+      "javascript": "javascriptreact",
+      "typescript": "typescriptreact"
+    },
+    "css.lint.unknownAtRules": "ignore",
+    "editor.gotoLocation.multipleDefinitions": "goto"
+}
