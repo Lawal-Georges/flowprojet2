@@ -3,8 +3,7 @@ import { getProjectInfo, getTaskDetails, updateTaskStatus } from '../../actions'
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
-import 'react-quill-new/dist/quill.snow.css';
-import ReactQuill from 'react-quill';
+import ReactQuill from 'react-quill-new';
 import { useUser } from '@clerk/nextjs';
 import EmptyState from 'app/components/EmptyState';
 import UserInfo from 'app/components/UserInfo';

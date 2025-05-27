@@ -5,12 +5,12 @@ import AssignTask from 'app/components/AssignTask';
 import Wrapper from 'app/components/Wrapper'
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react'
-import ReactQuill from 'react-quill';
 import { Project } from 'type';
 import 'react-quill-new/dist/quill.snow.css';
 import { toast } from 'react-toastify';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
+import ReactQuill from 'react-quill-new';
 
 const Page = ({ params }: { params: Promise<{ projectId: string }> }) => {
 

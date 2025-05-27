@@ -3,13 +3,13 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./node_modules/@prisma/client" // Spécifie le chemin de sortie
+  output   = "../node_modules/.prisma/client"
 }
 
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"  // Changé depuis "sqlite"
+  url      = env("DATABASE_URL")  // Utilisera l'URL de Supabase
 }
 
 model User {
@@ -58,4 +58,3 @@ model ProjectUser {
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   @@unique([userId, projectId])
 }
-
