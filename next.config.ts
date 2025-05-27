@@ -1,16 +1,18 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  turbopack: {
-    // Vos options Turbopack si nécessaire
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+  experimental: {
+    optimizePackageImports: [
+      'daisyui',
+      '@clerk/nextjs',
+      'react-quill-new'
+    ],
+    esmExternals: 'loose' // Important pour DaisyUI
   },
-  allowedDevOrigins: ['192.168.56.1'],
-  // Autres configurations...
-
-  webpack: (config: { externals: unknown[]; }) => {
-    config.externals = [...config.externals, 'quill'];
-    return config;
-  }
-
+  transpilePackages: [
+    'daisyui',
+    'react-quill-new'
+  ]
 }
 
 export default nextConfig

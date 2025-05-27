@@ -4,12 +4,14 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../node_modules/.prisma/client"
+  previewFeatures = ["relationJoins"]
 }
 
 
 datasource db {
-  provider = "postgresql"  // Changé depuis "sqlite"
+  provider = "postgresql"  
   url      = env("DATABASE_URL")  // Utilisera l'URL de Supabase
+  relationMode = "prisma" // Important pour Supabase
 }
 
 model User {
