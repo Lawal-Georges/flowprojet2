@@ -1,45 +1,58 @@
-import { PrismaClient } from '@/generated/prisma'; // <- ici corrigé avec le bon chemin
-// Removed duplicate and incorrect import of PrismaClient
-import type { Prisma } from '@/generated/prisma';
+import { PrismaClient } from '@prisma/client'
 
-type User = Prisma.UserCreateInput;
-import type { Project as PrismaProject, Task as PrismaTask } from '@/generated/prisma'; // Adjust the path if necessary
 
-function prismaClientSingleton() {
-  return new PrismaClient();
+// Singleton amélioré avec typage
+const prismaClientSingleton = (): PrismaClient => {
+  const client = new PrismaClient({
+    log: [
+      { level: 'warn', emit: 'event' },
+      { level: 'error', emit: 'event' },
+      ...(process.env.NODE_ENV === 'development'
+        ? [{ level: 'query', emit: 'event' } as const]
+        : []),
+    ],
+  })
+
+  // Logging des requêtes en dev
+  if (process.env.NODE_ENV === 'development') {
+    client.$on('query', (e: { query: string; duration: number }) => {
+      console.log('\n📝 Query:', e.query)
+      console.log('⏱️  Duration:', e.duration, 'ms')
+    })
+  }
+
+  return client
 }
 
-declare const globalThis: {
-  prismaGlobal: ReturnType<typeof prismaClientSingleton>;
-} & typeof global;
+// Déclaration globale type-safe
+declare global {
+  // eslint-disable-next-line no-var
+  var prisma: undefined | ReturnType<typeof prismaClientSingleton>
+}
 
-const prisma = globalThis.prismaGlobal ?? prismaClientSingleton();
+// Initialisation
+const prisma = globalThis.prisma ?? prismaClientSingleton()
 
-export default prisma;
+// Connexion automatique en production
+if (process.env.NODE_ENV === 'production') {
+  (prisma as PrismaClient).$connect()
+    .then(() => console.log('✅ Prisma Client connecté'))
+    .catch((err: unknown) => {
+      console.error('❌ Erreur de connexion Prisma:', err)
+      process.exit(1)
+    })
+}
 
-if (process.env.NODE_ENV !== 'production') globalThis.prismaGlobal = prisma;// Fusion du type PrismaProject avec vos propriétés supplémentaires
+// Hot-reload safe
+if (process.env.NODE_ENV !== 'production') {
+  globalThis.prisma = prisma
+}
 
+// Nettoyage propre
+process.on('beforeExit', async () => {
+  if (prisma) {
+    await prisma.$disconnect()
+  }
+})
 
-export type Project = PrismaProject & {
-    totalTasks?: number;
-    collaboratorsCount?: number;
-    taskStats?: {
-        toDo: number;
-        inProgress: number;
-        done: number;
-    };
-    percentages?: {
-        progressPercentage: number;
-        inProgressPercentage: number;
-        toDoPercentage: number;
-    };
-    tasks?: Task[]; // Assurez-vous que la relation tasks est incluse
-    users?: User[];
-    createdBy?: User;
-};
-
-export type Task = PrismaTask & {
-    user?: User | null;
-    createdBy?: User | null;
-};
-
+export default prisma
